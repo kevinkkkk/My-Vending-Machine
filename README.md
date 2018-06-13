@@ -8,6 +8,7 @@ Design and code a vending machine that satisfies the following diagram. But also
 ### MVP pattern. 
 #### Model layer
 All business logics were wrapped in bellow pojo Java models classes:
+#### VendingMachine
 ```
 VendingMachine - provides all APIs to access VandingMachine from View layer.
 1. resetMachine - resets vending machine to default
