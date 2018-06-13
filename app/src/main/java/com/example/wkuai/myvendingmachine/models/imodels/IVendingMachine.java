@@ -4,6 +4,7 @@ import com.example.wkuai.myvendingmachine.exceptions.NoEnoughItemsException;
 import com.example.wkuai.myvendingmachine.exceptions.NoSufficientFundsException;
 import com.example.wkuai.myvendingmachine.models.AcceptedCoins;
 import com.example.wkuai.myvendingmachine.models.ItemInventory;
+import com.example.wkuai.myvendingmachine.models.PurchaseHistory;
 import com.example.wkuai.myvendingmachine.models.VendingMachine;
 
 import java.util.List;

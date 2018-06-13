@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.example.wkuai.myvendingmachine.R;
 import com.example.wkuai.myvendingmachine.adapter.SummaryAdapter;
 import com.example.wkuai.myvendingmachine.models.AcceptedCoins;
-import com.example.wkuai.myvendingmachine.models.imodels.PurchaseHistory;
+import com.example.wkuai.myvendingmachine.models.PurchaseHistory;
 import com.example.wkuai.myvendingmachine.panels.VendingMachineFragPanel;
 import com.example.wkuai.myvendingmachine.presenters.VendingMachineFragPresenter;
 import com.example.wkuai.myvendingmachine.utilts.VendingUtilts;

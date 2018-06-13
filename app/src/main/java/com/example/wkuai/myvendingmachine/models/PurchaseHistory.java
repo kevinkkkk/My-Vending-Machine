@@ -1,6 +1,4 @@
-package com.example.wkuai.myvendingmachine.models.imodels;
-
-import com.example.wkuai.myvendingmachine.models.AcceptedCoins;
+package com.example.wkuai.myvendingmachine.models;
 
 import java.util.Map;
 

@@ -9,10 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.wkuai.myvendingmachine.R;
-import com.example.wkuai.myvendingmachine.models.imodels.PurchaseHistory;
+import com.example.wkuai.myvendingmachine.models.PurchaseHistory;
 
 import java.util.List;
 

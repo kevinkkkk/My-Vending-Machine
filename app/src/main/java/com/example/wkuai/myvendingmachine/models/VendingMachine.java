@@ -3,7 +3,6 @@ package com.example.wkuai.myvendingmachine.models;
 import com.example.wkuai.myvendingmachine.exceptions.NoEnoughItemsException;
 import com.example.wkuai.myvendingmachine.exceptions.NoSufficientFundsException;
 import com.example.wkuai.myvendingmachine.models.imodels.IVendingMachine;
-import com.example.wkuai.myvendingmachine.models.imodels.PurchaseHistory;
 import com.example.wkuai.myvendingmachine.utilts.VendingUtilts;
 
 import java.util.ArrayList;
