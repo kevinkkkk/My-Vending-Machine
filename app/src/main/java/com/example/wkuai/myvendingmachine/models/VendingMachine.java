@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * It provides all main logic of Vending machine
+ */
 public class VendingMachine implements IVendingMachine {
     private List<ItemInventory> inventory;
     private List<PurchaseHistory> history = new ArrayList<>();
@@ -27,22 +30,43 @@ public class VendingMachine implements IVendingMachine {
         resetMachine();
     }
 
+    /**
+     * {@link com.example.wkuai.myvendingmachine.models.VendingMachine.InventorListener}
+     * The listener is listening inventory changes. If it happens it will proactively update inventory number in view layer.
+     * {@link com.example.wkuai.myvendingmachine.presenters.VendingMachineFragPresenter} implements it
+     * @param listener
+     */
     @Override
     public void setInventoryListener(InventorListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Reset Vending machine to start state. include:
+     * 1. initial Inventory
+     * 2. initial cashier
+     */
     @Override
     public void resetMachine() {
         this.inventory = VendingUtilts.reloadInventory();
         this.cashier = new Cashier();
     }
 
+    /**
+     * Insert coins into slot. Cashier {@link com.example.wkuai.myvendingmachine.models.Cashier} takes care the rest.
+     * @param coin Acceptable coins in {@link AcceptedCoins}
+     * @return int as the inserted amount
+     */
     @Override
     public int insertCoin(AcceptedCoins coin) {
         return cashier.addCoinInToSlot(coin);
     }
 
+    /**
+     * Validate itemID that user input.
+     * @param itemId {@link com.example.wkuai.myvendingmachine.models.Item}
+     * @return true if the ID is valid. Otherwise returns false.
+     */
     @Override
     public boolean keyInId(String itemId) {
         if (!validate(itemId)) return false;
@@ -51,6 +75,12 @@ public class VendingMachine implements IVendingMachine {
         return true;
     }
 
+    /**
+     * Confirm selection and move forward purchasing
+     * @return int as changes will be returning to user
+     * @throws NoSufficientFundsException if there is not sufficient funds been received
+     * @throws NoEnoughItemsException  if the selected item has been sold out.
+     */
     @Override
     public int confirmSelection() throws NoSufficientFundsException, NoEnoughItemsException {
         int changes = cashier.confirmPurchasingAndReturnChanges(inventory.get(Integer.valueOf(keyInItemId) - 1).getItem().getPrice());
@@ -74,22 +104,40 @@ public class VendingMachine implements IVendingMachine {
         return changes;
     }
 
+    /**
+     * It will be called ehrn the user abort purchasing.
+     * 1. clear selection
+     * 2. return coins in slot
+     * @return int as the amount in slot
+     */
     @Override
     public int abortPurchasing() {
         postPurchase();
         return cashier.returnCoinsInSlot();
     }
 
+    /**
+     * Get Inventory information for all items.
+     * @return {@link ItemInventory}
+     */
     @Override
     public List<ItemInventory> getInventory() {
         return inventory;
     }
 
+    /**
+     * Check if there is a selected item
+     * @return true when there a item been selected. otherwise returns false
+     */
     @Override
     public boolean isItemSelected() {
         return isItemSelected;
     }
 
+    /**
+     * Provides history transactions. Use it to generate transaction log.
+     * @return {@link PurchaseHistory}
+     */
     @Override
     public List<PurchaseHistory> getPurchaseHistory() {
         return history;

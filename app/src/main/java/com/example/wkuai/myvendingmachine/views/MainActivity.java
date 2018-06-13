@@ -15,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
         initialView();
     }
 
+    /**
+     * load Vending machine view here
+     */
     private void initialView(){
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, new VendingMachineFragment()).commit();

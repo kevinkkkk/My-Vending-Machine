@@ -12,6 +12,7 @@ public class Item {
     /**
      * Parametzed constructor.
      * @param id: product unique ID.
+     * @param itemName: product name
      * @param price: sale price in pennies
      */
     public Item(String id, String itemName, int price){

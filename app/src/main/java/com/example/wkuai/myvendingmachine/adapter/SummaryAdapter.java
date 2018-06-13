@@ -15,6 +15,18 @@ import com.example.wkuai.myvendingmachine.models.PurchaseHistory;
 
 import java.util.List;
 
+/**
+ * Adapter for history summary. It provides below infos in the list view:
+ * - Purchase ID
+ * - Item Name
+ * - Item Price
+ * - Quarter count
+ * - Dime count
+ * - Nickel count
+ * - Total insert
+ * - Changes
+ *
+ */
 public class SummaryAdapter extends ArrayAdapter<PurchaseHistory> {
     List<PurchaseHistory> purchaseHistories;
 

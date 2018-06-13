@@ -45,6 +45,9 @@ public class VendingMachineFragment extends Fragment implements VendingMachineFr
 
     VendingMachineFragPresenter presenter;
 
+    /**
+     * Defines all listeners
+     */
     View.OnClickListener onCoinClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -105,6 +108,9 @@ public class VendingMachineFragment extends Fragment implements VendingMachineFr
         }
     };
 
+    /**
+     * Pop up a dialog box to show transaction summaries.
+     */
     View.OnClickListener onSummaryClickedListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -118,6 +124,8 @@ public class VendingMachineFragment extends Fragment implements VendingMachineFr
             dialog.show();
         }
     };
+
+    //-----------  Listener defines finished --------
 
     @Nullable
     @Override
@@ -168,6 +176,11 @@ public class VendingMachineFragment extends Fragment implements VendingMachineFr
         summarBtn.setOnClickListener(onSummaryClickedListener);
     }
 
+    /**
+     * Update inventory info to the viewlayer
+     * @param itemId
+     * @param count
+     */
     @Override
     public void renderItemInventory(String itemId, int count) {
         if (itemId.equals(VendingUtilts.ITEM_1_ID))
@@ -178,22 +191,37 @@ public class VendingMachineFragment extends Fragment implements VendingMachineFr
             item3Counter.setText(count + "");
     }
 
+    /**
+     * Reset view when purchase is finished
+     */
     @Override
     public void clearViews() {
         fundView.setText("");
         itemIdView.setText("");
     }
 
+    /**
+     * Update funds info while the user is inserting coins into slot
+     * @param funds
+     */
     @Override
     public void updateAvailableFundsView(int funds) {
         fundView.setText(funds + "c");
     }
 
+    /**
+     * Upadate item selection view when the user selects items
+     * @param itemId
+     */
     @Override
     public void updateItemSelectView(String itemId) {
         itemIdView.setText(itemId);
     }
 
+    /**
+     * Update funds return view when the machine returns changes or the purchasing been aborted.
+     * @param funds
+     */
     @Override
     public void updateReturnFundsView(int funds) {
         if (funds == 0) returnFundsView.setText("");
@@ -201,11 +229,22 @@ public class VendingMachineFragment extends Fragment implements VendingMachineFr
         clearViews();
     }
 
+    /**
+     * Toast alert in two cases:
+     * 1. No sufficient funds. The inserted coins will be returned
+     * 2. The selected item was sold out. The inserted coins will be returned
+     * @param msg
+     */
     @Override
     public void displayAlert(String msg) {
         Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
     }
 
+
+    /**
+     * Display an item image indicates teh selected item was delivered successfully.
+     * @param itemId
+     */
     @Override
     public void kickOutItem(String itemId) {
         if (itemId.equals(VendingUtilts.ITEM_1_ID)) {
@@ -217,6 +256,9 @@ public class VendingMachineFragment extends Fragment implements VendingMachineFr
         }
     }
 
+    /**
+     * Once the Reset button pressed. reset machine to ready state
+     */
     private void resetPurchase(){
         fundView.setText("");
         itemIdView.setText("");

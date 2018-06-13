@@ -1,5 +1,10 @@
 package com.example.wkuai.myvendingmachine.models;
 
+/**
+ * Inventor info for a single item
+ * 1. Item {@link Item}
+ * 2. quantity
+ */
 public class ItemInventory {
     private Item item;
     private int quantity;
@@ -23,6 +28,10 @@ public class ItemInventory {
         return true;
     }
 
+    /**
+     * For future use. We can use it when the machine reloaded
+     * @param quantity
+     */
     public void resetInventory(int quantity) {
         this.quantity = quantity;
     }

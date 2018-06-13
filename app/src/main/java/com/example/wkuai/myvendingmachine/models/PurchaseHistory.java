@@ -2,6 +2,17 @@ package com.example.wkuai.myvendingmachine.models;
 
 import java.util.Map;
 
+/**
+ * Summary all transactions. It logs:
+ * 1. purcahseId - unique ID for each transaction
+ * 2. itemName
+ * 3. itemPrice
+ * 4. Inserted Nickels number
+ * 5. Inserted Dimes number
+ * 6. Inserted Quarters number
+ * 7. Total inserted
+ * 8. Changes returned
+ */
 public class PurchaseHistory {
     private  int purcahseId;
     private String itemName;

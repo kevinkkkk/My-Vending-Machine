@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Provides features like receive, count, return and accept coins
+ */
 public class Cashier implements ICashier {
     private List<AcceptedCoins> slot = new ArrayList<>();
     private Map<AcceptedCoins, Integer> cashBox = new HashMap<>();
@@ -17,6 +20,9 @@ public class Cashier implements ICashier {
         resetCashier();
     }
 
+    /**
+     * Constructor call it to reset Cashier. It includes clear slot and fill cashBox to start state
+     */
     @Override
     public void resetCashier() {
         cashBox.put(AcceptedCoins.NICKELS, 100);
@@ -25,11 +31,23 @@ public class Cashier implements ICashier {
         slot.clear();
     }
 
+    /**
+     * Returns coins summary in slot. It helps generate transaction records when the purchase done successfully
+     * @return in Map format.
+     */
     @Override
     public Map<AcceptedCoins, Integer> getCoinsInSlot() {
         return acceptedCoinsInSlot;
     }
 
+
+    /**
+     * Simulate the process that the user insert coin into slot.
+     * The amount will be counting along insertion
+     * Return total amount that been inserted.
+     * @param coin Acceptable coins {@link AcceptedCoins}
+     * @return int as the total amount
+     */
     @Override
     public int addCoinInToSlot(AcceptedCoins coin) {
         //each time can not exceed 100 cents
@@ -37,6 +55,19 @@ public class Cashier implements ICashier {
         return countCoinsInSlot();
     }
 
+
+    /**
+     * Once the purchase is confirmed. Do the following steps:
+     * 1. Check inserted amount. Compare it with itemPrice. {@link com.example.wkuai.myvendingmachine.models.Item}
+     *    a. If it's great or equal to itemPrice. Accept coins into cashBox and take changes out of cashBox.
+     *    b. If it's less than itemPrice. Coins will jeep in slot
+     * 2. return difference amount in int. If it's negative that means the inserted fund is insufficient.
+     * {@link com.example.wkuai.myvendingmachine.models.VendingMachine} VendingMachine will use it to determine weather
+     * throw put NoSufficientFundsException. {@link com.example.wkuai.myvendingmachine.exceptions.NoSufficientFundsException}
+     *
+     * @param itemPrice
+     * @return int as changes
+     */
     @Override
     public int confirmPurchasingAndReturnChanges(int itemPrice) {
         int receivedInPennies = countCoinsInSlot();
@@ -50,6 +81,10 @@ public class Cashier implements ICashier {
         return changesInPennies;
     }
 
+    /**
+     * It will be called when user abort purchasing or not enough funds
+     * @return return coins in slot and clear slot.
+     */
     @Override
     public int returnCoinsInSlot() {
         int returnFunds = countCoinsInSlot();
