@@ -1,5 +1,6 @@
-package com.example.wkuai.myvendingmachine.view;
+package com.example.wkuai.myvendingmachine.views;
 
+import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -11,5 +12,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initialView();
+    }
+
+    private void initialView(){
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, new VendingMachineFragment()).commit();
     }
 }

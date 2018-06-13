@@ -1,4 +1,30 @@
 <resources>
     <string name="app_name">MyVendingMachine</string>
     <string name="vending_machine">Vending Machine</string>
+    <string name="item_1">Item1</string>
+    <string name="item_2">Item2</string>
+    <string name="item_3">Item3</string>
+    <string name="item_1_w_price">Item1 55c</string>
+    <string name="item_2_w_price">Item2 70c</string>
+    <string name="item_3_w_price">Item3 75c</string>
+    <string name="coin_1">5c</string>
+    <string name="coin_2">10c</string>
+    <string name="coin_3">25c</string>
+    <string name="id_input_info">Select item ID by pressing button.</string>
+    <string name="coin_input_info">Insert coins by pressing button.</string>
+    <string name="available_funds">funds</string>
+    <string name="item_id">ItemID</string>
+    <string name="confirm">Confirm</string>
+    <string name="abort">Coin Return</string>
+    <string name="reset">Reset</string>
+    <string name="return_fund">Return funds</string>
+    <string name="summary">Summary</string>
+    <string name="purchase_id">Trans ID</string>
+    <string name="item_name">Name</string>
+    <string name="item_price">Price</string>
+    <string name="nickel">5c</string>
+    <string name="dime">10c</string>
+    <string name="quarter">25c</string>
+    <string name="total_received">Inserted</string>
+    <string name="changes">changes</string>
 </resources>
