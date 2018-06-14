@@ -15,6 +15,7 @@ Design and code a vending machine that satisfies the following diagram. But also
 ## Achitecture
 
 ### MVP pattern. 
+![Architecture](structure.png)
 ### Model layer
 All business logic are wrapped in bellow pojo Java models classes:
 #### Class VendingMachine
