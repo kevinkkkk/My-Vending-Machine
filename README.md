@@ -2,12 +2,21 @@
 
 Design and code a vending machine that satisfies the following diagram. But also take considerations for additional features that may come in the future. We are looking for software developers that not only satisfy the requirements at hand but also plan for changes in the future. 
 
+## Screen shots
+### After inseted 100c and selected item 2
+![Inserted coins and selected itemId](select_item.png)
+
+### After confirmed purcahse. You can see the changes returned on the bottom and the selected item was delivered.
+![confired purcahse](purchase_completed.png)
+
+### Transaction summary
+![summary](summary.png)
 
 ## Achitecture
 
 ### MVP pattern. 
 ### Model layer
-All business logics were wrapped in bellow pojo Java models classes:
+All business logic are wrapped in bellow pojo Java models classes:
 #### Class VendingMachine
 ```
 VendingMachine - provides all APIs to access VandingMachine from View layer.
@@ -226,7 +235,7 @@ It displays all available items and their prices and inventory info.
 Also it displays funds info is the user inserts coins.
 Once purchase is finished or aborted. It delivers item or return funds.
 
-It's teh class to implements VendingMachinePanel.
+It's the class to implements VendingMachinePanel.
 ```
 
 #### class SummaryAdapter
