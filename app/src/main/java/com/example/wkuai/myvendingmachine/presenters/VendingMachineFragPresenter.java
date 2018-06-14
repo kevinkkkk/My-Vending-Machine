@@ -45,7 +45,7 @@ public class VendingMachineFragPresenter implements VendingMachine.InventorListe
     }
 
     /**
-     * Call VendingMachine to validate the selected itemId and send to view
+     * Count coins in slot while the user inserts them. Update view with the running amount
      * @param coin AcceptedCoin {@link AcceptedCoins}
      */
     public void insertCoin(AcceptedCoins coin){
