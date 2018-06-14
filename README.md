@@ -2,6 +2,8 @@
 
 Design and code a vending machine that satisfies the following diagram. But also take considerations for additional features that may come in the future. We are looking for software developers that not only satisfy the requirements at hand but also plan for changes in the future. 
 
+Please download APK from here. [APK installation file](MyVendingMachine.apk)
+
 ## Screen shots
 ### After inseted 100c and selected item 2
 ![Inserted coins and selected itemId](select_item.png)
