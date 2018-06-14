@@ -6,17 +6,17 @@ Design and code a vending machine that satisfies the following diagram. But also
 ## Achitecture
 
 ### MVP pattern. 
-#### Model layer
+### Model layer
 All business logics were wrapped in bellow pojo Java models classes:
-#### VendingMachine
+#### Class VendingMachine
 ```
 VendingMachine - provides all APIs to access VandingMachine from View layer.
-1. resetMachine - resets vending machine to default
+1. resetMachine - Reset Vending machine to start state
 2. insertCoin - inserts coin into slot and returns running total amount 
-3. KeyInId - keys in the itemId want to buy
-4. confirmSelection - confirms the purchasing
+3. KeyInId - Validate itemID that user input.
+4. confirmSelection - Confirm selection and process purchasing
 5. abortPurchasing - Aborts purchasing and returns coind in slot
-6. getInventory - returns all inventory number and get ready to render the view layer
+6. getInventory - returns inventory info for all items
 7. getPurchaseHistory - returns all transactions. It can be used for summary reporting
 
 Here is the interface which defines all methods:
@@ -26,6 +26,12 @@ public interface IVendingMachine {
     void resetMachine();
     int insertCoin(AcceptedCoins coin);
     boolean keyInId(String itemId);
+     /**
+     * Confirm selection and move forward purchasing
+     * @return int as changes will be returning to user
+     * @throws NoSufficientFundsException if there is not sufficient funds been received
+     * @throws NoEnoughItemsException  if the selected item has been sold out.
+     */
     int confirmSelection() throws NoSufficientFundsException, NoEnoughItemsException;
     int abortPurchasing();
     List<ItemInventory> getInventory();
@@ -34,82 +40,210 @@ public interface IVendingMachine {
     }
 
 ```
-### Prerequisites
-
-What things you need to install the software and how to install them
+#### Class Cashier
 
 ```
-Give examples
-```
+addCoinInToSlot(AcceptedCoins coin) - Simulate the process that the user insert coin into slot.
+confirmPurchasingAndReturnChanges(int itemPrice) - Once the purchase is confirmed.
+getCoinsInSlot() - Returns coins summary in slot.
+resetCashier() - Constructor calls it to reset Cashier.
+returnCoinsInSlot() - It will be called when user abort purchasing or not enough funds
 
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+Here is the interface:
+public interface ICashier {
+    int addCoinInToSlot(AcceptedCoins coin);
+    int confirmPurchasingAndReturnChanges(int itemPrice);
+    int returnCoinsInSlot();
+    void resetCashier();
+    Map<AcceptedCoins, Integer> getCoinsInSlot();
+}
 
 ```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
+#### enum AcceptedCoins
 
 ```
-Give an example
+/**
+ * Enum for accepted coin type and their unique keys
+ * NICKELS - nickels
+ * DIMES - dimes
+ * QUARTER - quarter
+ */
+public enum  AcceptedCoins {
+
+    NICKELS (5),
+    DIMES (10),
+    QUARTERS (25);
+...
+}
 ```
 
-## Deployment
+#### class Item
+```
+/**
+ * This class represent a item in vending machine
+ */
+public class Item {
 
-Add additional notes about how to deploy this on a live system
+    private final String id;
+    private final String itemName;
+    private final int price;
 
-## Built With
+    /**
+     * Parametzed constructor.
+     * @param id: product unique ID.
+     * @param itemName: product name
+     * @param price: sale price in pennies
+     */
+ 
+...
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+```
 
-## Contributing
+#### class ItemInventory
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+```
+/**
+ * Inventor info for a single item
+ * 1. Item {@link Item}
+ * 2. quantity
+ */
+public class ItemInventory {
+    private Item item;
+    private int quantity;
+    
+...
+```
 
-## Versioning
+#### class PurchaseHistory
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+```
+/**
+ * Summary all transactions. It logs:
+ * 1. purcahseId - unique ID for each transaction
+ * 2. itemName
+ * 3. itemPrice
+ * 4. Inserted Nickels number
+ * 5. Inserted Dimes number
+ * 6. Inserted Quarters number
+ * 7. Total inserted
+ * 8. Changes returned
+ */
+public class PurchaseHistory {
+    private  int purcahseId;
+    private String itemName;
+    private int itemPrice;
+    private int nickel;
+    private int dime;
+    private int quarter;
+    private int totalInsert;
+    private int changes;
+    
+....
+```
+### Presenter layer
 
-## Authors
+#### class VendingMachineFragPresenter
+```
+The presenter is responsible to act as the middle man between view and model. It retrieves data from the model and returns it formatted to the view
+It holds instance of VendingMachine
+ public VendingMachineFragPresenter() {
+        mVendingMachine = new VendingMachine();
+        mVendingMachine.setInventoryListener(this);
+    }
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+getInventory() - Retrieve Inventory info from VendingMachine and then call panel to render the view
+insertCoin(AcceptedCoins coin) - Call VendingMachine to validate the selected itemId and send to view
+selectItemId(String itemId) - Call VendingMachine to validate the selected itemId and send to view
+abortPurchasing() - Call this when the user abort purchasing. The inserted coins will be returned.
+confirmPurchasing() - Call this when user confirm the purchasing and then process the purchasing through VendingMachine
+    Here are two exception might be caught:
+     * 1. {@link NoSufficientFundsException} there is no sufficient funds
+     * 2. {@link NoEnoughItemsException} the selected item has been sold out
+getHistories() - get history transaction when the user press Summary button
+onInventoryChanged(ItemInventory itemInventory) - Implements {@linkInventorListener} Whenever the inventory info were updated. Call panel to update new number into view layer
+```
+### View layer
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+#### interface VendingMachineFragPanel
+```
+/**
+ * Abstract view layer methods. Presenter use panel to access view.
+ * {@link com.example.wkuai.myvendingmachine.views.VendingMachineFragment} implements it.
+ */
+public interface VendingMachineFragPanel {
 
-## License
+    /**
+     * Update inventory info to the viewlayer
+     * @param itemId
+     * @param count
+     */
+    void renderItemInventory(String itemId, int count);
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+    /**
+     * Reset view when purchase is finished
+     */
+    void clearViews();
 
-## Acknowledgments
+    /**
+     * Update funds info while the user is inserting coins into slot
+     * @param funds
+     */
+    void updateAvailableFundsView(int funds);
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+    /**
+     * Upadate item selection view when the user selects items
+     * @param itemId
+     */
+    void updateItemSelectView(String itemId);
+
+    /**
+     * Update funds return view when the machine returns changes or the purchasing been aborted.
+     * @param funds
+     */
+    void updateReturnFundsView(int funds);
+
+    /**
+     * Toast alert in two cases:
+     * 1. No sufficient funds. The inserted coins will be returned
+     * 2. The selected item was sold out. The inserted coins will be returned
+     * @param msg
+     */
+    void displayAlert(String msg);
+
+    /**
+     * Display an item image indicates teh selected item was delivered successfully.
+     * @param itemId
+     */
+    void kickOutItem(String itemId);
+}
+```
+#### class VendingMachineFragment
+```
+It holds all view parts of our VendingMachine. 
+Provides UI to simulate a Vending machine. 
+User can press buttons to keyin itemId or insert coins.
+It displays all available items and their prices and inventory info.
+Also it displays funds info is the user inserts coins.
+Once purchase is finished or aborted. It delivers item or return funds.
+
+It's teh class to implements VendingMachinePanel.
+```
+
+#### class SummaryAdapter
+```
+Summary ListView uses this adapter to display history transaction by below fields:
+
+ * - Purchase ID
+ * - Item Name
+ * - Item Price
+ * - Quarter count
+ * - Dime count
+ * - Nickel count
+ * - Total insert
+ * - Changes
+
+
+```
+
+
+
