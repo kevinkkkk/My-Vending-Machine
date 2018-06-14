@@ -17,13 +17,13 @@ Design and code a vending machine that satisfies the following diagram. But also
 ### MVP pattern. 
 ![Architecture](structure.png)
 ### Model layer
-All business logic are wrapped in bellow pojo Java models classes:
+All business logic are wrapped in bellow pojo Java model classes:
 #### Class VendingMachine
 ```
-VendingMachine - provides all APIs to access VandingMachine from View layer.
+VendingMachine - provides all APIs to access VandingMachine from presenter layer.
 1. resetMachine - Reset Vending machine to start state
-2. insertCoin - inserts coin into slot and returns running total amount 
-3. KeyInId - Validate itemID that user input.
+2. insertCoin - inserts coin into slot and returns running amount 
+3. KeyInId - Validate itemID that user selected.
 4. confirmSelection - Confirm selection and process purchasing
 5. abortPurchasing - Aborts purchasing and returns coind in slot
 6. getInventory - returns inventory info for all items
@@ -54,10 +54,10 @@ public interface IVendingMachine {
 
 ```
 addCoinInToSlot(AcceptedCoins coin) - Simulate the process that the user insert coin into slot.
-confirmPurchasingAndReturnChanges(int itemPrice) - Once the purchase is confirmed.
+confirmPurchasingAndReturnChanges(int itemPrice) - Process purcahse once get confirmed.
 getCoinsInSlot() - Returns coins summary in slot.
-resetCashier() - Constructor calls it to reset Cashier.
-returnCoinsInSlot() - It will be called when user abort purchasing or not enough funds
+resetCashier() - Constructor calls it to reset Cashier to start state.
+returnCoinsInSlot() - It will be called when user abort purchasing or there is no sufficient funds insterted.
 
 Here is the interface:
 public interface ICashier {
@@ -73,7 +73,7 @@ public interface ICashier {
 
 ```
 /**
- * Enum for accepted coin type and their unique keys
+ * Definwes all acceptable coin types and their unique keys
  * NICKELS - nickels
  * DIMES - dimes
  * QUARTER - quarter
@@ -90,7 +90,7 @@ public enum  AcceptedCoins {
 #### class Item
 ```
 /**
- * This class represent a item in vending machine
+ * This class represents a item in vending machine
  */
 public class Item {
 
@@ -99,10 +99,10 @@ public class Item {
     private final int price;
 
     /**
-     * Parametzed constructor.
+     * Parameterized constructor.
      * @param id: product unique ID.
      * @param itemName: product name
-     * @param price: sale price in pennies
+     * @param price: sale price in penny
      */
  
 ...
@@ -154,30 +154,32 @@ public class PurchaseHistory {
 
 #### class VendingMachineFragPresenter
 ```
-The presenter is responsible to act as the middle man between view and model. It retrieves data from the model and returns it formatted to the view
+The presenter is responsible to act as the middle man between view and model. It retrieves data from the model and 
+returns it formatted to the view.
+
 It holds instance of VendingMachine
  public VendingMachineFragPresenter() {
         mVendingMachine = new VendingMachine();
         mVendingMachine.setInventoryListener(this);
     }
 
-getInventory() - Retrieve Inventory info from VendingMachine and then call panel to render the view
-insertCoin(AcceptedCoins coin) - Call VendingMachine to validate the selected itemId and send to view
-selectItemId(String itemId) - Call VendingMachine to validate the selected itemId and send to view
+getInventory() - Retrieve Inventory info from VendingMachine and then call panel to render the view.
+insertCoin(AcceptedCoins coin) - Count coins in slot while the user inserts them. Update view with the running amount.
+selectItemId(String itemId) - Call VendingMachine to validate the keyin itemId and send to view if it's valid.
 abortPurchasing() - Call this when the user abort purchasing. The inserted coins will be returned.
-confirmPurchasing() - Call this when user confirm the purchasing and then process the purchasing through VendingMachine
+confirmPurchasing() - Call this if user confirmed the purchasing and then process the purchasing through VendingMachine
     Here are two exception might be caught:
-     * 1. {@link NoSufficientFundsException} there is no sufficient funds
-     * 2. {@link NoEnoughItemsException} the selected item has been sold out
-getHistories() - get history transaction when the user press Summary button
-onInventoryChanged(ItemInventory itemInventory) - Implements {@linkInventorListener} Whenever the inventory info were updated. Call panel to update new number into view layer
+     * 1. {@link NoSufficientFundsException} there is no sufficient funds.
+     * 2. {@link NoEnoughItemsException} the selected item has been sold out.
+getHistories() - get history transaction when the user press Summary button.
+onInventoryChanged(ItemInventory itemInventory) - Implements {@linkInventorListener} Whenever the inventory info were updated. Call panel to update new number into view layer.
 ```
 ### View layer
 
 #### interface VendingMachineFragPanel
 ```
 /**
- * Abstract view layer methods. Presenter use panel to access view.
+ * Abstract view layer methods. Presenter uses panel to access view.
  * {@link com.example.wkuai.myvendingmachine.views.VendingMachineFragment} implements it.
  */
 public interface VendingMachineFragPanel {
@@ -229,12 +231,12 @@ public interface VendingMachineFragPanel {
 ```
 #### class VendingMachineFragment
 ```
-It holds all view parts of our VendingMachine. 
-Provides UI to simulate a Vending machine. 
-User can press buttons to keyin itemId or insert coins.
-It displays all available items and their prices and inventory info.
-Also it displays funds info is the user inserts coins.
-Once purchase is finished or aborted. It delivers item or return funds.
+- It holds all view parts of our VendingMachine. 
+- It provides UI to simulate a Vending machine. 
+- User can press buttons to keyin itemId or insert coins.
+- It displays all available items and their prices and inventory info.
+- Also it displays funds info is the user inserts coins.
+- Once purchase is finished or aborted. It delivers item or return funds.
 
 It's the class to implements VendingMachinePanel.
 ```
